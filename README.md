@@ -30,3 +30,15 @@
 - [ ] Integrate Frontend View with the Thread Feed
 - [ ] Add Simple Reply / Comment System under Threads
 - [ ] Implement Upvote/Like Toggle Functionality
+
+
+backend
+│
+├── BackendApplication.java    (The main file that starts the app - already exists)
+│
+├── controllers/               (Layer 1: The Traffic Cops)
+├── services/                  (Layer 2: The Brains/Business Logic)
+├── repositories/              (Layer 3: The Database Access)
+├── models/                    (Layer 4: The Data Shapes - you started this!)
+├── dtos/                      (Optional but recommended: Data Transfer Objects)
+└── config/                    (Optional: Application configurations)
