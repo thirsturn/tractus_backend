@@ -45,7 +45,7 @@ public class UserControllerTest {
         request.setEmail("test@test.com");
         request.setPasswordHash("hash");
 
-        mockMvc.perform(post("/api/users")
+        mockMvc.perform(post("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())

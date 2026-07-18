@@ -27,9 +27,12 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     public UserResponse createUser(UserCreateRequest request) {
         User user = userMapper.toEntity(request);
-        // Normally we'd hash password here using BCrypt before saving
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         User savedUser = userRepository.save(user);
         return userMapper.toResponse(savedUser);
     }

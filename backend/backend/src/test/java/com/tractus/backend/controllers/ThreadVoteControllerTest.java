@@ -13,6 +13,9 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvc;
+import com.tractus.backend.security.JwtUtil;
+import com.tractus.backend.security.CustomUserDetails;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -38,6 +41,8 @@ public class ThreadVoteControllerTest {
     private SpaceRepository spaceRepository;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     private User testUser;
     private Thread testThread;
@@ -74,7 +79,11 @@ public class ThreadVoteControllerTest {
         request.setUserId(testUser.getId());
         request.setTargetId(testThread.getId());
 
+        CustomUserDetails userDetails = new CustomUserDetails(testUser);
+        String token = jwtUtil.generateToken(userDetails);
+
         mockMvc.perform(post("/api/thread-votes")
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
