@@ -1,6 +1,7 @@
 package com.tractus.backend.controllers;
 
-import com.tractus.backend.models.User;
+import com.tractus.backend.dtos.UserCreateRequest;
+import com.tractus.backend.dtos.UserResponse;
 import com.tractus.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,12 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public UserResponse createUser(@RequestBody UserCreateRequest request) {
+        return userService.createUser(request);
     }
 }

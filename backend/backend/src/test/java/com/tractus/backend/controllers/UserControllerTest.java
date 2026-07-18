@@ -40,14 +40,14 @@ public class UserControllerTest {
 
     @Test
     void testCreateUser() throws Exception {
-        User user = new User();
-        user.setUsername("testuser");
-        user.setEmail("test@test.com");
-        user.setPasswordHash("hash");
+        com.tractus.backend.dtos.UserCreateRequest request = new com.tractus.backend.dtos.UserCreateRequest();
+        request.setUsername("testuser");
+        request.setEmail("test@test.com");
+        request.setPasswordHash("hash");
 
         mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)))
+                .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username", is("testuser")))
                 .andExpect(jsonPath("$.email", is("test@test.com")));

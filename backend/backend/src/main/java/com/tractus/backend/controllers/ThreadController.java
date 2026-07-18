@@ -1,6 +1,7 @@
 package com.tractus.backend.controllers;
 
-import com.tractus.backend.models.Thread;
+import com.tractus.backend.dtos.ThreadCreateRequest;
+import com.tractus.backend.dtos.ThreadResponse;
 import com.tractus.backend.services.ThreadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,12 @@ public class ThreadController {
     private ThreadService threadService;
 
     @GetMapping("/space/{spaceId}")
-    public List<Thread> getThreadsBySpace(@PathVariable Long spaceId) {
+    public List<ThreadResponse> getThreadsBySpace(@PathVariable Long spaceId) {
         return threadService.getThreadsBySpace(spaceId);
     }
 
     @PostMapping
-    public Thread createThread(@RequestBody Thread thread) {
-        return threadService.createThread(thread);
+    public ThreadResponse createThread(@RequestBody ThreadCreateRequest request) {
+        return threadService.createThread(request);
     }
 }

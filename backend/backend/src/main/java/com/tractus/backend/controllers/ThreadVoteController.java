@@ -1,6 +1,7 @@
 package com.tractus.backend.controllers;
 
-import com.tractus.backend.models.ThreadVote;
+import com.tractus.backend.dtos.VoteRequest;
+import com.tractus.backend.dtos.VoteResponse;
 import com.tractus.backend.services.ThreadVoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,12 @@ public class ThreadVoteController {
     private ThreadVoteService threadVoteService;
 
     @GetMapping("/thread/{threadId}")
-    public List<ThreadVote> getVotesByThread(@PathVariable Long threadId) {
+    public List<VoteResponse> getVotesByThread(@PathVariable Long threadId) {
         return threadVoteService.getVotesByThread(threadId);
     }
 
     @PostMapping
-    public ThreadVote castVote(@RequestBody ThreadVote vote) {
-        return threadVoteService.castVote(vote);
+    public VoteResponse castVote(@RequestBody VoteRequest request) {
+        return threadVoteService.castVote(request);
     }
 }

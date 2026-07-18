@@ -9,8 +9,7 @@ Content-Type: application/json
 {
   "username": "johndoe",
   "email": "john.doe@example.com",
-  "passwordHash": "hashed_password_placeholder",
-  "bio": "A passionate developer."
+  "passwordHash": "hashed_password_placeholder"
 }
 
 ### Get all spaces
@@ -36,11 +35,6 @@ Content-Type: application/json
 
 {
   "title": "Welcome to Tractus",
-  "content": "This is our first thread!",
-  "author": {
-    "id": 1
-  },
-  "space": {
-    "id": 1
-  }
+  "userId": 1,
+  "spaceId": 1
 }
