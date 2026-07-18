@@ -40,13 +40,13 @@ public class SpaceControllerTest {
 
     @Test
     void testCreateSpace() throws Exception {
-        Space space = new Space();
-        space.setName("Tech");
-        space.setDescription("Tech space");
+        com.tractus.backend.dtos.SpaceCreateRequest request = new com.tractus.backend.dtos.SpaceCreateRequest();
+        request.setName("Tech");
+        request.setDescription("Tech space");
 
         mockMvc.perform(post("/api/spaces")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(space)))
+                .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Tech")))
                 .andExpect(jsonPath("$.description", is("Tech space")));

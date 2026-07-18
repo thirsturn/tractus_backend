@@ -1,6 +1,7 @@
 package com.tractus.backend.controllers;
 
-import com.tractus.backend.models.CommentVote;
+import com.tractus.backend.dtos.VoteRequest;
+import com.tractus.backend.dtos.VoteResponse;
 import com.tractus.backend.services.CommentVoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,12 @@ public class CommentVoteController {
     private CommentVoteService commentVoteService;
 
     @GetMapping("/comment/{commentId}")
-    public List<CommentVote> getVotesByComment(@PathVariable Long commentId) {
+    public List<VoteResponse> getVotesByComment(@PathVariable Long commentId) {
         return commentVoteService.getVotesByComment(commentId);
     }
 
     @PostMapping
-    public CommentVote castVote(@RequestBody CommentVote vote) {
-        return commentVoteService.castVote(vote);
+    public VoteResponse castVote(@RequestBody VoteRequest request) {
+        return commentVoteService.castVote(request);
     }
 }
