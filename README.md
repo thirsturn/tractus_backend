@@ -36,7 +36,7 @@ backend
 │
 ├── BackendApplication.java    (The main file that starts the app - already exists)
 │
-├── controllers/               (Layer 1: The Traffic Cops)
+├── controllers/               (Layer 1: The Traffic Cops/ API endpoints)
 ├── services/                  (Layer 2: The Brains/Business Logic)
 ├── repositories/              (Layer 3: The Database Access)
 ├── models/                    (Layer 4: The Data Shapes - you started this!)
