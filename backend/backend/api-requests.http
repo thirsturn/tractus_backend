@@ -2,14 +2,23 @@
 GET http://localhost:8081/api/users
 Accept: application/json
 
-### Create a new user
-POST http://localhost:8081/api/users
+### Register a new user
+POST http://localhost:8081/api/auth/register
 Content-Type: application/json
 
 {
   "username": "johndoe",
   "email": "john.doe@example.com",
-  "passwordHash": "hashed_password_placeholder"
+  "passwordHash": "password123"
+}
+
+### Login user
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "password": "password123"
 }
 
 ### Get all spaces
@@ -24,6 +33,9 @@ Content-Type: application/json
   "name": "General Discussion",
   "description": "A place for general topics."
 }
+// Note: POST requests now require an Authorization header with a valid Bearer token.
+// Example:
+// Authorization: Bearer <your_token_here>
 
 ### Get threads in a space (Assuming spaceId is 1, modify as needed)
 GET http://localhost:8081/api/threads/space/1
