@@ -1,0 +1,50 @@
+package com.tractus.backend.services;
+
+import com.tractus.backend.dtos.ThreadCreateRequest;
+import com.tractus.backend.dtos.ThreadResponse;
+import com.tractus.backend.mappers.ThreadMapper;
+import com.tractus.backend.models.Space;
+import com.tractus.backend.models.Thread;
+import com.tractus.backend.models.User;
+import com.tractus.backend.repositories.SpaceRepository;
+import com.tractus.backend.repositories.ThreadRepository;
+import com.tractus.backend.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class ThreadService {
+    
+    @Autowired
+    private ThreadRepository threadRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private SpaceRepository spaceRepository;
+    @Autowired
+    private ThreadMapper threadMapper;
+
+    public List<ThreadResponse> getThreadsBySpace(Long spaceId) {
+        return threadRepository.findBySpaceId(spaceId).stream()
+                .map(threadMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+    
+    public ThreadResponse createThread(ThreadCreateRequest request) {
+        Thread thread = threadMapper.toEntity(request);
+        
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Space space = spaceRepository.findById(request.getSpaceId())
+                .orElseThrow(() -> new RuntimeException("Space not found"));
+                
+        thread.setUser(user);
+        thread.setSpace(space);
+        
+        Thread savedThread = threadRepository.save(thread);
+        return threadMapper.toResponse(savedThread);
+    }
+}
