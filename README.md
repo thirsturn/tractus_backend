@@ -13,13 +13,13 @@
 
 ## 🗺️ MVP ROADMAP
 
-### 📁 Phase 1: Database & Backend Architecture (.NET)
-- [ ] Initialize ASP.NET Core Web API Project (`Tractus.API`)
-- [ ] Setup Entity Framework Core with PostgreSQL
-- [ ] Design Core Schema: Users, Spaces (Topics), Threads, Replies
-- [ ] Implement JWT Authentication Endpoints (Register / Login)
+### 📁 Phase 1: Database & Backend Architecture (Spring Boot)
+- [x] Initialize Spring Boot Web API Project
+- [x] Setup JPA/Hibernate with PostgreSQL
+- [x] Design Core Schema: Users, Spaces (Topics), Threads, Replies
+- [x] Implement JWT Authentication Endpoints (Register / Login)
 
-### 💻 Phase 2: Frontend Core UI (Angular or Flutter)
+### 💻 Phase 2: Frontend Core UI (React / Vite)
 - [ ] Setup Frontend Project Structure & State Management
 - [ ] Design Minimalist Light/Dark Theme Layout
 - [ ] Create Login & Registration UI Forms
@@ -40,5 +40,25 @@ backend
 ├── services/                  (Layer 2: The Brains/Business Logic)
 ├── repositories/              (Layer 3: The Database Access)
 ├── models/                    (Layer 4: The Data Shapes - you started this!)
-├── dtos/                      (Optional but recommended: Data Transfer Objects)
-└── config/                    (Optional: Application configurations)
+├── dtos/                      (Layer 5: Data Transfer Objects)
+└── config/                    (Layer 6: Application & Security configurations)
+
+---
+
+## 🏗️ Frontend Architecture (Phase 2)
+
+**Tech Stack:** React (Vite), TypeScript, React Router, Axios, Vanilla CSS.
+
+```text
+tractus_web/
+├── src/
+│   ├── assets/        # Images, SVG icons
+│   ├── components/    # Reusable UI components (Buttons, Cards, Inputs)
+│   ├── context/       # AuthContext for global state (JWT token)
+│   ├── layouts/       # MainDashboardLayout (Sidebar + Main Content area)
+│   ├── pages/         # Smart components (LoginPage, FeedPage, ThreadPage)
+│   ├── services/      # Axios API calls (auth.service.ts, space.service.ts)
+│   ├── types/         # TypeScript interfaces mapping to backend DTOs
+│   ├── App.tsx        # React Router configuration
+│   └── index.css      # Global Design System (Colors, Typography)
+```
