@@ -1,6 +1,7 @@
 package com.tractus.backend.services;
 
 import com.tractus.backend.dtos.UserCreateRequest;
+import com.tractus.backend.dtos.UserUpdateRequest;
 import com.tractus.backend.dtos.UserResponse;
 import com.tractus.backend.mappers.UserMapper;
 import com.tractus.backend.models.User;
@@ -40,5 +41,23 @@ public class UserService {
     public Optional<UserResponse> getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .map(userMapper::toResponse);
+    }
+
+    public UserResponse updateUser(Long id, UserUpdateRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        if (request.getBio() != null) {
+            user.setBio(request.getBio());
+        }
+        if (request.getLocation() != null) {
+            user.setLocation(request.getLocation());
+        }
+        if (request.getWebsite() != null) {
+            user.setWebsite(request.getWebsite());
+        }
+
+        User updatedUser = userRepository.save(user);
+        return userMapper.toResponse(updatedUser);
     }
 }
