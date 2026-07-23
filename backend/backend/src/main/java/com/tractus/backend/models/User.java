@@ -26,6 +26,13 @@ public class User {
     @Column(name = "password_hash", nullable=false) // Maps to "password_hash" column
     private String passwordHash; 
 
+    @Column(length = 500)
+    private String bio;
+
+    private String location;
+
+    private String website;
+
     // A User can author MANY Threads
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Thread> threads;

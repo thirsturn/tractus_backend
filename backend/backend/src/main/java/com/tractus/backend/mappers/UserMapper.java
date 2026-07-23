@@ -27,6 +27,9 @@ public class UserMapper {
         response.setId(user.getId());
         response.setUsername(user.getUsername());
         response.setEmail(user.getEmail());
+        response.setBio(user.getBio());
+        response.setLocation(user.getLocation());
+        response.setWebsite(user.getWebsite());
         return response;
     }
 }
