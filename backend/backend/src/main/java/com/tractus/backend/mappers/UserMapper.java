@@ -30,6 +30,7 @@ public class UserMapper {
         response.setBio(user.getBio());
         response.setLocation(user.getLocation());
         response.setWebsite(user.getWebsite());
+        response.setProfileImageUrl(user.getProfileImageUrl());
         return response;
     }
 }

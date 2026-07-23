@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -46,6 +47,16 @@ public class UserController {
             return ResponseEntity.ok(updatedUser);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/{id}/avatar")
+    public ResponseEntity<UserResponse> uploadAvatar(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+        try {
+            UserResponse updatedUser = userService.uploadAvatar(id, file);
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 

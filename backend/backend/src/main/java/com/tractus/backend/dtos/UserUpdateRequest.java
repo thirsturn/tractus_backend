@@ -7,4 +7,5 @@ public class UserUpdateRequest {
     private String bio;
     private String location;
     private String website;
+    private String profileImageUrl;
 }

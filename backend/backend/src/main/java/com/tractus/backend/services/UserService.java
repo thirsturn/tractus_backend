@@ -9,9 +9,15 @@ import com.tractus.backend.repositories.FollowRepository;
 import com.tractus.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,7 +75,39 @@ public class UserService {
             user.setWebsite(request.getWebsite());
         }
 
+        if (request.getProfileImageUrl() != null) {
+            user.setProfileImageUrl(request.getProfileImageUrl());
+        }
+
         User updatedUser = userRepository.save(user);
         return enrichWithCounts(updatedUser);
+    }
+
+    public UserResponse uploadAvatar(Long id, MultipartFile file) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        try {
+            String uploadDir = "uploads/avatars/";
+            Path uploadPath = Paths.get(uploadDir);
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename != null && originalFilename.contains(".") ? originalFilename.substring(originalFilename.lastIndexOf(".")) : "";
+            String newFilename = UUID.randomUUID().toString() + extension;
+
+            Path filePath = uploadPath.resolve(newFilename);
+            Files.copy(file.getInputStream(), filePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+            String fileUrl = "http://localhost:8080/" + uploadDir + newFilename;
+            user.setProfileImageUrl(fileUrl);
+            User updatedUser = userRepository.save(user);
+            return enrichWithCounts(updatedUser);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to store file", e);
+        }
     }
 }
