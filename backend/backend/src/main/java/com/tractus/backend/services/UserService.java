@@ -5,6 +5,7 @@ import com.tractus.backend.dtos.UserUpdateRequest;
 import com.tractus.backend.dtos.UserResponse;
 import com.tractus.backend.mappers.UserMapper;
 import com.tractus.backend.models.User;
+import com.tractus.backend.repositories.FollowRepository;
 import com.tractus.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,20 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private FollowRepository followRepository;
+
+    // Enrich a UserResponse with follower/following counts
+    private UserResponse enrichWithCounts(User user) {
+        UserResponse response = userMapper.toResponse(user);
+        response.setFollowerCount(followRepository.countByFollowing(user));
+        response.setFollowingCount(followRepository.countByFollower(user));
+        return response;
+    }
+
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(userMapper::toResponse)
+                .map(this::enrichWithCounts)
                 .collect(Collectors.toList());
     }
 
@@ -35,12 +47,12 @@ public class UserService {
         User user = userMapper.toEntity(request);
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         User savedUser = userRepository.save(user);
-        return userMapper.toResponse(savedUser);
+        return enrichWithCounts(savedUser);
     }
 
     public Optional<UserResponse> getUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .map(userMapper::toResponse);
+                .map(this::enrichWithCounts);
     }
 
     public UserResponse updateUser(Long id, UserUpdateRequest request) {
@@ -58,6 +70,6 @@ public class UserService {
         }
 
         User updatedUser = userRepository.save(user);
-        return userMapper.toResponse(updatedUser);
+        return enrichWithCounts(updatedUser);
     }
 }

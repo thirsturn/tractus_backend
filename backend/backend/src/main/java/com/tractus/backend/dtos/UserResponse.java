@@ -10,4 +10,6 @@ public class UserResponse {
     private String bio;
     private String location;
     private String website;
+    private long followerCount;
+    private long followingCount;
 }
