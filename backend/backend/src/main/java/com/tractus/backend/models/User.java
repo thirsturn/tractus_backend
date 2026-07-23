@@ -33,6 +33,9 @@ public class User {
 
     private String website;
 
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
     // A User can author MANY Threads
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Thread> threads;
