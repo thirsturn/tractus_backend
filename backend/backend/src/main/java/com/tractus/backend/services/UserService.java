@@ -78,6 +78,9 @@ public class UserService {
         if (request.getProfileImageUrl() != null) {
             user.setProfileImageUrl(request.getProfileImageUrl());
         }
+        if (request.getPassword() != null && !request.getPassword().trim().isEmpty()) {
+            user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        }
 
         User updatedUser = userRepository.save(user);
         return enrichWithCounts(updatedUser);
