@@ -45,6 +45,8 @@ public class UserController {
         try {
             UserResponse updatedUser = userService.updateUser(id, request);
             return ResponseEntity.ok(updatedUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

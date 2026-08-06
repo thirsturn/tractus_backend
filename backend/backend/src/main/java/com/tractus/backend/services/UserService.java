@@ -79,6 +79,9 @@ public class UserService {
             user.setProfileImageUrl(request.getProfileImageUrl());
         }
         if (request.getPassword() != null && !request.getPassword().trim().isEmpty()) {
+            if (request.getCurrentPassword() == null || !passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
+                throw new IllegalArgumentException("Current password is incorrect");
+            }
             user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         }
 

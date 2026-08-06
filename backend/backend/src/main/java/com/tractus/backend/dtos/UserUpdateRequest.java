@@ -8,5 +8,6 @@ public class UserUpdateRequest {
     private String location;
     private String website;
     private String profileImageUrl;
+    private String currentPassword;
     private String password;
 }
