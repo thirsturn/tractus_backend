@@ -32,6 +32,12 @@ public class ThreadService {
                 .map(threadMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    public ThreadResponse getThreadById(Long id) {
+        Thread thread = threadRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Thread not found"));
+        return threadMapper.toResponse(thread);
+    }
     
     public ThreadResponse createThread(ThreadCreateRequest request) {
         Thread thread = threadMapper.toEntity(request);

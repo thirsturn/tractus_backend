@@ -24,4 +24,9 @@ public class ThreadController {
     public ThreadResponse createThread(@RequestBody ThreadCreateRequest request) {
         return threadService.createThread(request);
     }
+
+    @GetMapping("/{id}")
+    public ThreadResponse getThreadById(@PathVariable Long id) {
+        return threadService.getThreadById(id);
+    }
 }
