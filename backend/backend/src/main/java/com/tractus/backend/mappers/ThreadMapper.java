@@ -18,6 +18,8 @@ public class ThreadMapper {
         }
         Thread thread = new Thread();
         thread.setTitle(request.getTitle());
+        thread.setContent(request.getContent());
+        thread.setImageUrl(request.getImageUrl());
         // Note: userId and spaceId will be mapped in the Service layer by fetching from DB
         return thread;
     }
@@ -29,6 +31,8 @@ public class ThreadMapper {
         ThreadResponse response = new ThreadResponse();
         response.setId(thread.getId());
         response.setTitle(thread.getTitle());
+        response.setContent(thread.getContent());
+        response.setImageUrl(thread.getImageUrl());
         response.setAuthor(userMapper.toResponse(thread.getUser()));
         if (thread.getSpace() != null) {
             response.setSpaceId(thread.getSpace().getId());

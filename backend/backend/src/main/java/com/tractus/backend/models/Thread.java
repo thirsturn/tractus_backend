@@ -20,6 +20,12 @@ public class Thread {
     @Column(nullable = false) // Thread must have a title
     private String title;
 
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
     // A Thread belongs to ONE User (N-to-1 relationship)
     // This creates a Foreign Key column named 'user_id' in the threads table
     @ManyToOne(fetch = FetchType.LAZY)
