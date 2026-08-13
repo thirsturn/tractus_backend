@@ -34,17 +34,33 @@ public class ThreadVoteService {
     }
 
     public VoteResponse castVote(VoteRequest request) {
-        ThreadVote vote = threadVoteMapper.toEntity(request);
-        
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Thread thread = threadRepository.findById(request.getTargetId())
                 .orElseThrow(() -> new RuntimeException("Thread not found"));
-                
-        vote.setUser(user);
-        vote.setThread(thread);
-        
-        ThreadVote savedVote = threadVoteRepository.save(vote);
+
+        java.util.Optional<ThreadVote> existingVoteOpt = threadVoteRepository.findByUserIdAndThreadId(user.getId(), thread.getId());
+
+        ThreadVote voteToSave;
+        if (existingVoteOpt.isPresent()) {
+            ThreadVote existingVote = existingVoteOpt.get();
+            if (existingVote.getVoteType() == request.getVoteType()) {
+                // Toggle off: user clicked the same vote again, so remove it
+                threadVoteRepository.delete(existingVote);
+                return threadVoteMapper.toResponse(existingVote); // Returning the deleted vote structure to frontend so they know
+            } else {
+                // Change vote: e.g. UP to DOWN
+                existingVote.setVoteType(request.getVoteType());
+                voteToSave = existingVote;
+            }
+        } else {
+            // New vote
+            voteToSave = threadVoteMapper.toEntity(request);
+            voteToSave.setUser(user);
+            voteToSave.setThread(thread);
+        }
+
+        ThreadVote savedVote = threadVoteRepository.save(voteToSave);
         return threadVoteMapper.toResponse(savedVote);
     }
 }

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface CommentVoteRepository extends JpaRepository<CommentVote, Long> {
     List<CommentVote> findByCommentId(Long commentId);
+    java.util.Optional<CommentVote> findByUserIdAndCommentId(Long userId, Long commentId);
 }

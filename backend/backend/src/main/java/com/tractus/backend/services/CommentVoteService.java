@@ -34,17 +34,32 @@ public class CommentVoteService {
     }
 
     public VoteResponse castVote(VoteRequest request) {
-        CommentVote vote = commentVoteMapper.toEntity(request);
-        
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Comment comment = commentRepository.findById(request.getTargetId())
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
-                
-        vote.setUser(user);
-        vote.setComment(comment);
-        
-        CommentVote savedVote = commentVoteRepository.save(vote);
+
+        java.util.Optional<CommentVote> existingVoteOpt = commentVoteRepository.findByUserIdAndCommentId(user.getId(), comment.getId());
+
+        CommentVote voteToSave;
+        if (existingVoteOpt.isPresent()) {
+            CommentVote existingVote = existingVoteOpt.get();
+            if (existingVote.getVoteType() == request.getVoteType()) {
+                // Toggle off
+                commentVoteRepository.delete(existingVote);
+                return commentVoteMapper.toResponse(existingVote);
+            } else {
+                // Change vote
+                existingVote.setVoteType(request.getVoteType());
+                voteToSave = existingVote;
+            }
+        } else {
+            voteToSave = commentVoteMapper.toEntity(request);
+            voteToSave.setUser(user);
+            voteToSave.setComment(comment);
+        }
+
+        CommentVote savedVote = commentVoteRepository.save(voteToSave);
         return commentVoteMapper.toResponse(savedVote);
     }
 }
