@@ -37,7 +37,7 @@ public class User {
     private String profileImageUrl;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(columnDefinition = "varchar(255) default 'ROLE_USER'")
     private Role role = Role.ROLE_USER;
 
     // A User can author MANY Threads
