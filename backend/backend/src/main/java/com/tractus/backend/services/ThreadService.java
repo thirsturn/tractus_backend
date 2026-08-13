@@ -39,7 +39,10 @@ public class ThreadService {
         return threadMapper.toResponse(thread);
     }
     
-    public ThreadResponse createThread(ThreadCreateRequest request) {
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    public ThreadResponse createThread(ThreadCreateRequest request, org.springframework.web.multipart.MultipartFile image) {
         Thread thread = threadMapper.toEntity(request);
         
         User user = userRepository.findById(request.getUserId())
@@ -49,6 +52,13 @@ public class ThreadService {
                 
         thread.setUser(user);
         thread.setSpace(space);
+
+        if (image != null && !image.isEmpty()) {
+            String imageUrl = fileStorageService.storeFile(image);
+            thread.setImageUrl("http://localhost:8081" + imageUrl);
+        } else if (request.getImageUrl() != null) {
+            thread.setImageUrl(request.getImageUrl());
+        }
         
         Thread savedThread = threadRepository.save(thread);
         return threadMapper.toResponse(savedThread);

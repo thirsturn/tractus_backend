@@ -16,8 +16,9 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    // Using a securely generated key for HS256
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // Hardcoded secret key for development. In production, this should be in application.properties
+    private static final String SECRET = "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF";
+    private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

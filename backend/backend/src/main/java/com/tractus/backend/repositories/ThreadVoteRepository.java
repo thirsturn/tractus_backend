@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface ThreadVoteRepository extends JpaRepository<ThreadVote, Long> {
     List<ThreadVote> findByThreadId(Long threadId);
+    java.util.Optional<ThreadVote> findByUserIdAndThreadId(Long userId, Long threadId);
 }

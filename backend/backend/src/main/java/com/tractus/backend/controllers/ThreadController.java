@@ -20,9 +20,11 @@ public class ThreadController {
         return threadService.getThreadsBySpace(spaceId);
     }
 
-    @PostMapping
-    public ThreadResponse createThread(@RequestBody ThreadCreateRequest request) {
-        return threadService.createThread(request);
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ThreadResponse createThread(
+            @ModelAttribute ThreadCreateRequest request,
+            @RequestParam(value = "image", required = false) org.springframework.web.multipart.MultipartFile image) {
+        return threadService.createThread(request, image);
     }
 
     @GetMapping("/{id}")
