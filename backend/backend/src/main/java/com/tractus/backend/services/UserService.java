@@ -50,6 +50,10 @@ public class UserService {
     private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     public UserResponse createUser(UserCreateRequest request) {
+        String pwd = request.getPasswordHash(); // The DTO probably uses this field for the raw password
+        if (pwd == null || pwd.length() < 8 || !pwd.matches(".*[A-Z].*") || !pwd.matches(".*[a-z].*") || !pwd.matches(".*\\d.*") || !pwd.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*")) {
+            throw new IllegalArgumentException("Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character.");
+        }
         User user = userMapper.toEntity(request);
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         User savedUser = userRepository.save(user);

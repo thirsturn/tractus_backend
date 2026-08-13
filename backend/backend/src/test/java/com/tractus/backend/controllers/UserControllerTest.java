@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -43,7 +44,7 @@ public class UserControllerTest {
         com.tractus.backend.dtos.UserCreateRequest request = new com.tractus.backend.dtos.UserCreateRequest();
         request.setUsername("testuser");
         request.setEmail("test@test.com");
-        request.setPasswordHash("hash");
+        request.setPasswordHash("Password123!");
 
         mockMvc.perform(post("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -54,6 +55,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testadmin", roles = {"USER"})
     void testGetAllUsers() throws Exception {
         User user = new User();
         user.setUsername("testuser2");

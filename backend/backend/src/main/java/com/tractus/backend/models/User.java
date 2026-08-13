@@ -36,6 +36,10 @@ public class User {
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.ROLE_USER;
+
     // A User can author MANY Threads
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Thread> threads;

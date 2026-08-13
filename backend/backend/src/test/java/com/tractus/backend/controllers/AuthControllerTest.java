@@ -43,7 +43,7 @@ public class AuthControllerTest {
         UserCreateRequest request = new UserCreateRequest();
         request.setUsername("newuser");
         request.setEmail("new@test.com");
-        request.setPasswordHash("pass");
+        request.setPasswordHash("Password123!");
 
         mockMvc.perform(post("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -59,7 +59,7 @@ public class AuthControllerTest {
         UserCreateRequest regRequest = new UserCreateRequest();
         regRequest.setUsername("testlogin");
         regRequest.setEmail("login@test.com");
-        regRequest.setPasswordHash("password123");
+        regRequest.setPasswordHash("Password123!");
 
         mockMvc.perform(post("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +69,7 @@ public class AuthControllerTest {
         // Now attempt login
         AuthRequest loginRequest = new AuthRequest();
         loginRequest.setUsername("testlogin");
-        loginRequest.setPassword("password123");
+        loginRequest.setPassword("Password123!");
 
         mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
