@@ -31,6 +31,7 @@ public class UserMapper {
         response.setLocation(user.getLocation());
         response.setWebsite(user.getWebsite());
         response.setProfileImageUrl(user.getProfileImageUrl());
+        response.setCoverImageUrl(user.getCoverImageUrl());
         return response;
     }
 }

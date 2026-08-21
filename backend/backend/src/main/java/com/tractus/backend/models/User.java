@@ -36,6 +36,9 @@ public class User {
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
+    @Column(name = "cover_image_url")
+    private String coverImageUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) default 'ROLE_USER'")
     private Role role = Role.ROLE_USER;

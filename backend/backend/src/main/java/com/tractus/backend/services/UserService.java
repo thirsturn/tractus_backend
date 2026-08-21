@@ -110,6 +110,9 @@ public class UserService {
         if (request.getProfileImageUrl() != null) {
             user.setProfileImageUrl(request.getProfileImageUrl());
         }
+        if (request.getCoverImageUrl() != null) {
+            user.setCoverImageUrl(request.getCoverImageUrl());
+        }
         if (request.getPassword() != null && !request.getPassword().trim().isEmpty()) {
             if (request.getCurrentPassword() == null || !passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
                 throw new IllegalArgumentException("Current password is incorrect");
