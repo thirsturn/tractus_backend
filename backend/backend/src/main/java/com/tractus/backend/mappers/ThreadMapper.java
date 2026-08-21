@@ -33,9 +33,14 @@ public class ThreadMapper {
         response.setTitle(thread.getTitle());
         response.setContent(thread.getContent());
         response.setImageUrl(thread.getImageUrl());
-        response.setAuthor(userMapper.toResponse(thread.getUser()));
+        if (thread.getUser() != null) {
+            response.setAuthor(userMapper.toResponse(thread.getUser()));
+        }
         if (thread.getSpace() != null) {
             response.setSpaceId(thread.getSpace().getId());
+        }
+        if (thread.getCreatedAt() != null) {
+            response.setCreatedAt(thread.getCreatedAt().toString());
         }
         if (thread.getComments() != null) {
             response.setCommentCount(thread.getComments().size());

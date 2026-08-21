@@ -30,13 +30,13 @@ public class ThreadService {
     private ThreadMapper threadMapper;
 
     public List<ThreadResponse> getThreadsBySpace(Long spaceId) {
-        return threadRepository.findBySpaceId(spaceId).stream()
+        return threadRepository.findBySpaceIdOrderByIdDesc(spaceId).stream()
                 .map(threadMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
     public List<ThreadResponse> getThreadsByUser(String username) {
-        return threadRepository.findByUserUsername(username).stream()
+        return threadRepository.findByUserUsernameOrderByIdDesc(username).stream()
                 .map(threadMapper::toResponse)
                 .collect(Collectors.toList());
     }
