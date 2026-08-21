@@ -38,7 +38,7 @@ public class Thread {
     @JoinColumn(name = "space_id", nullable = false)
     private Space space;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private java.time.LocalDateTime createdAt = java.time.LocalDateTime.now();
 
     @PrePersist
