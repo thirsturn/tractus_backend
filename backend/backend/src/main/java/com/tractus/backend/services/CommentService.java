@@ -29,6 +29,9 @@ public class CommentService {
     @Autowired
     private CommentMapper commentMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public List<CommentResponse> getCommentsByThread(Long threadId) {
         return commentRepository.findByThreadId(threadId).stream()
                 .map(commentMapper::toResponse)
@@ -62,6 +65,17 @@ public class CommentService {
         }
 
         Comment savedComment = commentRepository.save(comment);
+
+        if (thread.getUser() != null) {
+            notificationService.createNotification(
+                thread.getUser(),
+                user,
+                "COMMENT",
+                user.getUsername() + " commented on your discussion: \"" + thread.getTitle() + "\"",
+                thread.getId()
+            );
+        }
+
         return commentMapper.toResponse(savedComment);
     }
 }

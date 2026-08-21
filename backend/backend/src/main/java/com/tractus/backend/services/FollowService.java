@@ -16,6 +16,9 @@ public class FollowService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public long getFollowerCount(User user) {
         return followRepository.countByFollowing(user);
     }
@@ -46,6 +49,14 @@ public class FollowService {
         follow.setFollower(follower);
         follow.setFollowing(following);
         followRepository.save(follow);
+
+        notificationService.createNotification(
+            following,
+            follower,
+            "FOLLOW",
+            follower.getUsername() + " started following you",
+            null
+        );
     }
 
     public void unfollow(String followerUsername, String followingUsername) {

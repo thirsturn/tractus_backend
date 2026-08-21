@@ -29,6 +29,9 @@ public class ThreadVoteService {
     @Autowired
     private ThreadVoteMapper threadVoteMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public List<VoteResponse> getVotesByThread(Long threadId) {
         return threadVoteRepository.findByThreadId(threadId).stream()
                 .map(threadVoteMapper::toResponse)
@@ -69,6 +72,17 @@ public class ThreadVoteService {
         }
 
         ThreadVote savedVote = threadVoteRepository.save(voteToSave);
+
+        if (savedVote.getVoteType() == com.tractus.backend.models.VoteType.UP && thread.getUser() != null) {
+            notificationService.createNotification(
+                thread.getUser(),
+                user,
+                "UPVOTE",
+                user.getUsername() + " upvoted your discussion: \"" + thread.getTitle() + "\"",
+                thread.getId()
+            );
+        }
+
         return threadVoteMapper.toResponse(savedVote);
     }
 }

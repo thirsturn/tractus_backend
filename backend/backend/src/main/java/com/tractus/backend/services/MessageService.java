@@ -26,6 +26,9 @@ public class MessageService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public MessageResponse sendMessage(String senderUsername, MessageRequest request) {
         User sender = userRepository.findByUsername(senderUsername)
                 .orElseThrow(() -> new RuntimeException("Sender not found: " + senderUsername));
@@ -35,6 +38,14 @@ public class MessageService {
 
         Message message = new Message(sender, recipient, request.getContent());
         Message saved = messageRepository.save(message);
+
+        notificationService.createNotification(
+            recipient,
+            sender,
+            "MESSAGE",
+            sender.getUsername() + " sent you a private message",
+            null
+        );
 
         return toResponse(saved);
     }
