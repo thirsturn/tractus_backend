@@ -34,16 +34,16 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) {
-        return userService.getUserByUsername(username)
+    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username, Authentication authentication) {
+        return userService.getUserByUsername(username, authentication)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest request) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest request, Authentication authentication) {
         try {
-            UserResponse updatedUser = userService.updateUser(id, request);
+            UserResponse updatedUser = userService.updateUser(id, request, authentication);
             return ResponseEntity.ok(updatedUser);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();

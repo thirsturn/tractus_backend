@@ -21,6 +21,11 @@ public class ThreadController {
         return threadService.getThreadsBySpace(spaceId);
     }
 
+    @GetMapping("/user/{username}")
+    public List<ThreadResponse> getThreadsByUser(@PathVariable String username) {
+        return threadService.getThreadsByUser(username);
+    }
+
     @PostMapping(consumes = {"multipart/form-data"})
     public ThreadResponse createThread(
             @ModelAttribute ThreadCreateRequest request,

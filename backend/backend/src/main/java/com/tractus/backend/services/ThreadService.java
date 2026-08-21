@@ -35,6 +35,12 @@ public class ThreadService {
                 .collect(Collectors.toList());
     }
 
+    public List<ThreadResponse> getThreadsByUser(String username) {
+        return threadRepository.findByUserUsername(username).stream()
+                .map(threadMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
     public ThreadResponse getThreadById(Long id) {
         Thread thread = threadRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Thread not found"));

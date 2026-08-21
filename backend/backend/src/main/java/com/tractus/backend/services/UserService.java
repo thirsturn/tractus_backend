@@ -7,7 +7,9 @@ import com.tractus.backend.mappers.UserMapper;
 import com.tractus.backend.models.User;
 import com.tractus.backend.repositories.FollowRepository;
 import com.tractus.backend.repositories.UserRepository;
+import com.tractus.backend.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,10 +36,25 @@ public class UserService {
 
     // Enrich a UserResponse with follower/following counts
     private UserResponse enrichWithCounts(User user) {
+        return enrichWithCounts(user, null);
+    }
+
+    // Enrich a UserResponse with follower/following counts, plus whether `viewer` follows `user`
+    private UserResponse enrichWithCounts(User user, User viewer) {
         UserResponse response = userMapper.toResponse(user);
         response.setFollowerCount(followRepository.countByFollowing(user));
         response.setFollowingCount(followRepository.countByFollower(user));
+        boolean isFollowing = viewer != null && !viewer.getId().equals(user.getId())
+                && followRepository.existsByFollowerAndFollowing(viewer, user);
+        response.setFollowing(isFollowing);
         return response;
+    }
+
+    private User resolveViewer(Authentication authentication) {
+        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+            return ((CustomUserDetails) authentication.getPrincipal()).getUser();
+        }
+        return null;
     }
 
     public List<UserResponse> getAllUsers() {
@@ -65,9 +82,20 @@ public class UserService {
                 .map(this::enrichWithCounts);
     }
 
-    public UserResponse updateUser(Long id, UserUpdateRequest request) {
+    public Optional<UserResponse> getUserByUsername(String username, Authentication authentication) {
+        User viewer = resolveViewer(authentication);
+        return userRepository.findByUsername(username)
+                .map(user -> enrichWithCounts(user, viewer));
+    }
+
+    public UserResponse updateUser(Long id, UserUpdateRequest request, Authentication authentication) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        Long authenticatedUserId = ((CustomUserDetails) authentication.getPrincipal()).getUser().getId();
+        if (!authenticatedUserId.equals(user.getId())) {
+            throw new RuntimeException("Cannot update another user's profile");
+        }
 
         if (request.getBio() != null) {
             user.setBio(request.getBio());

@@ -13,4 +13,5 @@ public class UserResponse {
     private String profileImageUrl;
     private long followerCount;
     private long followingCount;
+    private boolean following;
 }
