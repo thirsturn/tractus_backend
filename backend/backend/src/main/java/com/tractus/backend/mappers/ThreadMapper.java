@@ -37,6 +37,9 @@ public class ThreadMapper {
         if (thread.getSpace() != null) {
             response.setSpaceId(thread.getSpace().getId());
         }
+        if (thread.getCreatedAt() != null) {
+            response.setCreatedAt(thread.getCreatedAt().toString());
+        }
         if (thread.getComments() != null) {
             response.setCommentCount(thread.getComments().size());
         }

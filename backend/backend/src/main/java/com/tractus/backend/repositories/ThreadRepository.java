@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ThreadRepository extends JpaRepository<Thread, Long> {
-    List<Thread> findBySpaceId(Long spaceId); // Custom method to find threads by space
-    List<Thread> findByUserUsername(String username);
+    List<Thread> findBySpaceIdOrderByIdDesc(Long spaceId);
+    List<Thread> findByUserUsernameOrderByIdDesc(String username);
+    List<Thread> findAllByOrderByIdDesc();
 }

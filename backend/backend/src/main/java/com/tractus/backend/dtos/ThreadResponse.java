@@ -10,5 +10,6 @@ public class ThreadResponse {
     private String imageUrl;
     private UserResponse author;
     private Long spaceId;
+    private String createdAt;
     private Integer commentCount = 0;
 }
