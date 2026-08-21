@@ -4,6 +4,7 @@ import com.tractus.backend.dtos.VoteRequest;
 import com.tractus.backend.dtos.VoteResponse;
 import com.tractus.backend.services.CommentVoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class CommentVoteController {
     }
 
     @PostMapping
-    public VoteResponse castVote(@RequestBody VoteRequest request) {
-        return commentVoteService.castVote(request);
+    public VoteResponse castVote(@RequestBody VoteRequest request, Authentication authentication) {
+        return commentVoteService.castVote(request, authentication);
     }
 }
