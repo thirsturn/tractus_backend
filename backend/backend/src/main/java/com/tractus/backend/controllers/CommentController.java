@@ -4,6 +4,7 @@ import com.tractus.backend.dtos.CommentCreateRequest;
 import com.tractus.backend.dtos.CommentResponse;
 import com.tractus.backend.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public CommentResponse createComment(@RequestBody CommentCreateRequest request) {
-        return commentService.createComment(request);
+    public CommentResponse createComment(@RequestBody CommentCreateRequest request, Authentication authentication) {
+        return commentService.createComment(request, authentication);
     }
 }

@@ -9,7 +9,9 @@ import com.tractus.backend.models.User;
 import com.tractus.backend.repositories.CommentRepository;
 import com.tractus.backend.repositories.ThreadRepository;
 import com.tractus.backend.repositories.UserRepository;
+import com.tractus.backend.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,23 +35,32 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    public CommentResponse createComment(CommentCreateRequest request) {
+    public CommentResponse createComment(CommentCreateRequest request, Authentication authentication) {
         Comment comment = commentMapper.toEntity(request);
-        
+
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Long authenticatedUserId = ((CustomUserDetails) authentication.getPrincipal()).getUser().getId();
+        if (!authenticatedUserId.equals(user.getId())) {
+            throw new RuntimeException("Cannot create a comment as another user");
+        }
+
         Thread thread = threadRepository.findById(request.getThreadId())
                 .orElseThrow(() -> new RuntimeException("Thread not found"));
-                
+
         comment.setUser(user);
         comment.setThread(thread);
-        
+
         if (request.getParentCommentId() != null) {
             Comment parent = commentRepository.findById(request.getParentCommentId())
                     .orElseThrow(() -> new RuntimeException("Parent comment not found"));
+            if (!parent.getThread().getId().equals(thread.getId())) {
+                throw new RuntimeException("Parent comment does not belong to this thread");
+            }
             comment.setParentComment(parent);
         }
-        
+
         Comment savedComment = commentRepository.save(comment);
         return commentMapper.toResponse(savedComment);
     }

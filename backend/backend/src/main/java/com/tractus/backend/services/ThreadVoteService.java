@@ -9,7 +9,9 @@ import com.tractus.backend.models.User;
 import com.tractus.backend.repositories.ThreadRepository;
 import com.tractus.backend.repositories.ThreadVoteRepository;
 import com.tractus.backend.repositories.UserRepository;
+import com.tractus.backend.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,9 +35,15 @@ public class ThreadVoteService {
                 .collect(Collectors.toList());
     }
 
-    public VoteResponse castVote(VoteRequest request) {
+    public VoteResponse castVote(VoteRequest request, Authentication authentication) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Long authenticatedUserId = ((CustomUserDetails) authentication.getPrincipal()).getUser().getId();
+        if (!authenticatedUserId.equals(user.getId())) {
+            throw new RuntimeException("Cannot cast a vote as another user");
+        }
+
         Thread thread = threadRepository.findById(request.getTargetId())
                 .orElseThrow(() -> new RuntimeException("Thread not found"));
 
