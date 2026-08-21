@@ -2,6 +2,8 @@ package com.tractus.backend.dtos;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class UserResponse {
     private Long id;
@@ -13,4 +15,9 @@ public class UserResponse {
     private String profileImageUrl;
     private long followerCount;
     private long followingCount;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+    private LocalDate dateOfBirth;
+    private String gender;
 }

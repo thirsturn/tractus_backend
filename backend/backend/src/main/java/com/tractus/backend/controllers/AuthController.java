@@ -9,12 +9,15 @@ import com.tractus.backend.security.CustomUserDetailsService;
 import com.tractus.backend.security.JwtUtil;
 import com.tractus.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -33,21 +36,22 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthRequest authRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthRequest authRequest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
         } catch (BadCredentialsException e) {
-            throw new Exception("Incorrect username or password", e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Collections.singletonMap("message", "Incorrect username or password"));
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
-        
+
         // Find the user to return in the response
         UserResponse userResponse = userService.getUserByUsername(authRequest.getUsername())
-            .orElseThrow(() -> new Exception("User not found"));
+            .orElseThrow(() -> new RuntimeException("User not found"));
 
         return ResponseEntity.ok(new AuthResponse(jwt, userResponse));
     }

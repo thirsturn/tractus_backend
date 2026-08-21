@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import java.util.List;
 
 @Entity
@@ -40,6 +41,7 @@ public class Thread {
 
     // A Thread can have MANY Comments (1-to-N relationship)
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @BatchSize(size = 50)
     private List<Comment> comments;
 
     // A Thread can have MANY Votes (1-to-N relationship)

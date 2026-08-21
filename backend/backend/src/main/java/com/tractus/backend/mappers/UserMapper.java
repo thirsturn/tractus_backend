@@ -16,6 +16,11 @@ public class UserMapper {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPasswordHash(request.getPasswordHash());
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setDateOfBirth(request.getDateOfBirth());
+        user.setGender(request.getGender());
         return user;
     }
 
@@ -31,6 +36,11 @@ public class UserMapper {
         response.setLocation(user.getLocation());
         response.setWebsite(user.getWebsite());
         response.setProfileImageUrl(user.getProfileImageUrl());
+        response.setFirstName(user.getFirstName());
+        response.setLastName(user.getLastName());
+        response.setPhoneNumber(user.getPhoneNumber());
+        response.setDateOfBirth(user.getDateOfBirth());
+        response.setGender(user.getGender());
         return response;
     }
 }
