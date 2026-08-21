@@ -4,6 +4,7 @@ import com.tractus.backend.dtos.ThreadCreateRequest;
 import com.tractus.backend.dtos.ThreadResponse;
 import com.tractus.backend.services.ThreadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +24,9 @@ public class ThreadController {
     @PostMapping(consumes = {"multipart/form-data"})
     public ThreadResponse createThread(
             @ModelAttribute ThreadCreateRequest request,
-            @RequestParam(value = "image", required = false) org.springframework.web.multipart.MultipartFile image) {
-        return threadService.createThread(request, image);
+            @RequestParam(value = "image", required = false) org.springframework.web.multipart.MultipartFile image,
+            Authentication authentication) {
+        return threadService.createThread(request, image, authentication);
     }
 
     @GetMapping("/{id}")
